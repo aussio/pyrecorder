@@ -7,7 +7,7 @@ from recorders.mouse import MouseRecorder
 from recorders.keyboard import KeyboardRecorder
 
 
-RUN_TIME = 5
+RUN_TIME = 5000
 PYAUTOGUI_EVENT_PAUSE = 0.01
 PYAUTOGUI_DARWIN_PAUSE = 0.001
 
@@ -15,8 +15,8 @@ PYAUTOGUI_DARWIN_PAUSE = 0.001
 if __name__ == "__main__":
 
     timer = ElapsedTimeThread()
-    mouse = MouseRecorder()
-    keyboard = KeyboardRecorder()
+    mouse = MouseRecorder(timer=timer)
+    keyboard = KeyboardRecorder(timer=timer)
 
     def start():
         timer.start()
@@ -38,11 +38,13 @@ if __name__ == "__main__":
     stop()
 
     print("REPLAYING!")
+    print(f"Total events: {len(mouse.events)}")
     time.sleep(2)
 
-    pyautogui.PAUSE = 0.01
+    pyautogui.PAUSE = 0.11
     pyautogui.DARWIN_CATCH_UP_TIME = 0.002
-    for event in mouse.mouse_events:
+
+    for event in mouse.events:
         if event["type"] == EVENT_TYPE.MOUSE_MOVE:
             print(event)
             pyautogui.moveTo(event["coordinates"]["x"], event["coordinates"]["y"])

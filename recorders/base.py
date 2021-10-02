@@ -3,6 +3,14 @@ from models import *
 from timer import ElapsedTimeThread
 
 
+SAMPLING_RATE = 50
+"""The millisecond amount at which we deduplicate events.
+
+I haven't found how to reduce the sampling rate from `pynput` in the
+Recorders, so this replicates that same effect by not writing down all events.
+"""
+
+
 class BaseRecorder:
 
     listener: pynput._util.AbstractListener
@@ -22,8 +30,11 @@ class BaseRecorder:
 
     def append_event(self, event: GUIEvent):
         """Append deduplicated events."""
-        # TODO: how to check equality here?
-        if self.events[-1] == event:
+        event["time"] = self._round(event["time"])
+        if len(self.events) > 0 and self.events[-1]["time"] == event["time"]:
             pass
         else:
             self.events.append(event)
+
+    def _round(self, time: float):
+        return round(time / SAMPLING_RATE)

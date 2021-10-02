@@ -7,7 +7,7 @@ class KeyboardRecorder(BaseRecorder):
     ESCAPE_KEY = pykeyboard.Key.esc
 
     def __init__(self, on_esc=lambda: None, timer=None):
-        super().__init__()
+        super().__init__(timer=timer)
         self.listener = pykeyboard.Listener(on_press=self.on_press, on_release=self.on_release)
         self.on_esc = on_esc
 
