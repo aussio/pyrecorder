@@ -139,3 +139,7 @@ cython_debug/
 
 # IDE stuff
 .vscode
+
+# PyRecorder stuff
+recordings/*
+!recordings/__init__.py

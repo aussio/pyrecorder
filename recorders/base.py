@@ -30,11 +30,18 @@ class BaseRecorder:
 
     def append_event(self, event: GUIEvent):
         """Append deduplicated events."""
-        event["time"] = self._round(event["time"])
-        if len(self.events) > 0 and self.events[-1]["time"] == event["time"]:
-            pass
-        else:
+        if len(self.events) == 0:
             self.events.append(event)
+        else:
+            if event["type"] == EVENT_TYPE.MOUSE_CLICK:
+                self.events.append(event)
+            elif event["type"] == EVENT_TYPE.MOUSE_MOVE:
+                last_rounded_time = self._round(self.events[-1]["time"])
+                current_rounded_time = self._round(event["time"])
+                if last_rounded_time == current_rounded_time:
+                    pass
+                else:
+                    self.events.append(event)
 
     def _round(self, time: float):
         return round(time / SAMPLING_RATE)

@@ -9,9 +9,12 @@ class EVENT_TYPE(Enum):
 
 
 class GUIEvent(TypedDict):
+    id: int  # for troubleshooting
     type: EVENT_TYPE
     time: float
     coordinates: Coordinates
+    down: bool
+    up: bool
 
 
 class Coordinates(TypedDict):
