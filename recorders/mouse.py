@@ -14,7 +14,7 @@ class MouseRecorder(BaseRecorder):
         self.listener = pymouse.Listener(on_move=self.on_move, on_click=self.on_click, on_scroll=self.on_scroll)
 
     def on_move(self, x, y):
-        print(".", end="", flush=True)
+        # print(".", end="", flush=True)
         self.append_event(
             GUIEvent(
                 id=next(self.id_iter),
@@ -27,7 +27,7 @@ class MouseRecorder(BaseRecorder):
     def on_click(self, x, y, button, pressed):
         if pressed:
             next_id = next(self.id_iter)
-            print(f"click:{next_id}", x, y)
+            # print(f"click:{next_id}", x, y)
             self.append_event(
                 GUIEvent(
                     id=next_id,

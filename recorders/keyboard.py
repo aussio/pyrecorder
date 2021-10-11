@@ -18,6 +18,6 @@ class KeyboardRecorder(BaseRecorder):
             print("special key {0} pressed".format(key))
 
     def on_release(self, key):
-        print("{0} released".format(key))
+        # print("{0} released".format(key))
         if key == self.ESCAPE_KEY:
             self.on_esc()

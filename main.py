@@ -37,7 +37,7 @@ def parse_arguments():
         "--duration",
         "-d",
         type=int,
-        default=3000,
+        default=-1,
         help=f"The duration to record in milliseconds. -1 to record indefinitely - use 'ESC' key to stop.",
     )
 
@@ -71,6 +71,8 @@ def record(record_filename, duration):
         keyboard.stop()
 
     keyboard.on_esc = stop
+
+    print("Recording! Press 'esc' key to stop.")
 
     start()
 
@@ -108,7 +110,7 @@ def playback_event(event):
         pyautogui.moveTo(event["coordinates"]["x"], event["coordinates"]["y"])
     elif event["type"] == EVENT_TYPE.MOUSE_CLICK:
         x, y = event["coordinates"]["x"], event["coordinates"]["y"]
-        print(f"click:{event['id']}", x, y)
+        # print(f"click:{event['id']}", x, y)
         pyautogui.click(
             x,
             y,
@@ -116,7 +118,6 @@ def playback_event(event):
 
 
 def get_sleep(current_event, next_event):
-    print((next_event["time"] - current_event["time"]) / 1000)
     return (next_event["time"] - current_event["time"]) / 1000
 
 
