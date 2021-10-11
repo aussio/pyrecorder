@@ -40,6 +40,15 @@ def parse_arguments():
         default=-1,
         help=f"The duration to record in milliseconds. -1 to record indefinitely - use 'ESC' key to stop.",
     )
+    parser.add_argument(
+        "--fast",
+        "-f",
+        type=float,
+        default=1,
+        action="store",
+        dest="speed_modifier",
+        help=f"Run the playback at X-times the speed.",
+    )
 
     args = parser.parse_args()
 
@@ -87,7 +96,7 @@ def record(record_filename, duration):
     print(f"Done! Saved within {RECORDINGS_PATH / args.record_filename}!")
 
 
-def playback(playback_filename):
+def playback(playback_filename, speed_modifier):
 
     with open(RECORDINGS_PATH / playback_filename, "rb") as f:
         events = pickle.load(f)
@@ -99,7 +108,8 @@ def playback(playback_filename):
     for index, event in enumerate(events):
         playback_event(event)
         try:
-            time.sleep(get_sleep(event, events[index + 1]))
+            sleep_duration = get_sleep(event, events[index + 1])
+            time.sleep(sleep_duration / speed_modifier)
         except IndexError:
             pass
 
@@ -130,6 +140,6 @@ if __name__ == "__main__":
     if args.record_filename:
         record(args.record_filename, args.duration)
     elif args.play_filename:
-        playback(args.play_filename)
+        playback(args.play_filename, args.speed_modifier)
     else:
         print("Unknown args.")
